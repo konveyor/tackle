@@ -21,7 +21,7 @@ The reports provide information about applications’ suitability for Kubernetes
 
 [Tackle Controls](https://github.com/konveyor/tackle-controls) are a collection of entities that add value to Application Inventory and the Pathfinder assessment.  
 
-They comprise Business Services, Stakeholders, Stakeholder Groups, Job Functions, Tag Types and Tags.  
+They comprise of Business Services, Stakeholders, Stakeholder Groups, Job Functions, Tag Types and Tags.  
 
 ## Projects
 
