@@ -3,12 +3,13 @@
 # tackle
 
 ## Refactor Applications to Kubernetes
+
 The tackle project repositories contain applications that support the modernization and migration of applications to Kubernetes.  
 
 The first application added to tackle is the Application Inventory / Pathfinder.  
 It comprises 3 microservices and accessible from a common [Tackle UI](https://github.com/konveyor/tackle-ui/).  
 
-The Application Inventory allows users to maintain their portfolio of applications, link them to the business services that they support, define their interdependencies, and use an extensible tagging model to add metadata to describe and categorise them in multiple dimensions.  
+The [Tackle Application Inventory](https://github.com/konveyor/tackle-application-inventory) allows users to maintain their portfolio of applications, link them to the business services that they support, define their interdependencies, and use an extensible tagging model to add metadata to describe and categorise them in multiple dimensions.  
 
 The Application is the vehicle by which application can be selected for assessment by Pathfinder.  
 
@@ -18,6 +19,20 @@ Through interaction with the questionnaire, and review process, the system is en
 
 The reports provide information about applications’ suitability for Kubernetes, highlight associated risks, and generate an adoption plan informed by the applications’ prioritization, business criticality and dependencies.  
 
-The Controls are a collection of entities that add value to Application Inventory and the Pathfinder assessment.  
+[Tackle Controls](https://github.com/konveyor/tackle-controls) are a collection of entities that add value to Application Inventory and the Pathfinder assessment.  
 
 They comprise Business Services, Stakeholders, Stakeholder Groups, Job Functions, Tag Types and Tags.  
+
+## Projects
+
+* [Tackle Web UI](https://github.com/konveyor/tackle-ui)
+* [Tackle Application Inventory](https://github.com/konveyor/tackle-application-inventory)
+* [Tackle Pathfinder](https://github.com/konveyor/tackle-pathfinder)
+* [Tackle Controls](https://github.com/konveyor/tackle-controls)
+* [Tackle Documentation](https://github.com/konveyor/tackle-documentation)
+* [Tackle Commons REST](https://github.com/konveyor/tackle-commons-rest)
+* [Tackle Keycloak Theme](https://github.com/konveyor/tackle-keycloak-theme)
+
+## Get in touch
+
+* [tackle-dev](https://groups.google.com/g/tackle-dev) conversations group
