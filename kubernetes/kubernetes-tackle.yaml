@@ -2357,6 +2357,9 @@ spec:
               value: 'http://tackle-controls:8080'
             - name: APPLICATION_INVENTORY_API_URL
               value: 'http://tackle-application-inventory:8080'
+            - name: PATHFINDER_API_URL
+              # temporary and wrong value
+              value: 'http://tackle-controls:8080'
             - name: SSO_REALM
               value: quarkus
             - name: SSO_CLIENT_ID

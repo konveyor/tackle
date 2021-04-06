@@ -966,6 +966,10 @@
                     "value": "http://tackle-application-inventory:8080"
                   },
                   {
+                    "name": "PATHFINDER_API_URL",
+                    "value": "http://tackle-controls:8080"
+                  },
+                  {
                     "name": "SSO_REALM",
                     "value": "quarkus"
                   },
