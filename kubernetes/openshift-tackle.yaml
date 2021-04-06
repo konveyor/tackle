@@ -53,6 +53,18 @@ parameters:
     from: "[a-zA-Z0-9]{8}"
     generate: expression
     required: true
+  - displayName: Pathfinder Database Username
+    description: Pathfinder database user name
+    name: PATHFINDER_DATASOURCE_USERNAME
+    from: user[a-zA-Z0-9]{3}
+    generate: expression
+    required: true
+  - displayName: Pathfinder Database Password
+    description: Pathfinder database user password
+    name: PATHFINDER_DATASOURCE_PASSWORD
+    from: "[a-zA-Z0-9]{8}"
+    generate: expression
+    required: true
   - displayName: Keycloak Database Username
     description: Keycloak database user name
     name: KEYCLOAK_DATASOURCE_USERNAME
@@ -99,6 +111,22 @@ objects:
           storage: 1Gi
       volumeMode: Filesystem
   - kind: PersistentVolumeClaim
+      apiVersion: v1
+      metadata:
+        name: pathfinder-postgresql
+        labels:
+          app.kubernetes.io/name: pathfinder-postgresql
+          app.kubernetes.io/component: database
+          app.kubernetes.io/instance: pathfinder-postgresql
+          app.kubernetes.io/part-of: tackle
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        volumeMode: Filesystem
+  - kind: PersistentVolumeClaim
     apiVersion: v1
     metadata:
       name: keycloak-postgresql
@@ -141,6 +169,20 @@ objects:
       database-name: application_inventory_db
       database-password: "${APPLICATION_INVENTORY_DATASOURCE_USERNAME}"
       database-user: "${APPLICATION_INVENTORY_DATASOURCE_USERNAME}"
+    type: Opaque
+  - kind: Secret
+    apiVersion: v1
+    metadata:
+      name: pathfinder-postgresql
+      labels:
+        app.kubernetes.io/name: pathfinder-postgresql
+        app.kubernetes.io/component: database
+        app.kubernetes.io/instance: pathfinder-postgresql
+        app.kubernetes.io/part-of: tackle
+    stringData:
+      database-name: pathfinder_db
+      database-password: "${PATHFINDER_DATASOURCE_PASSWORD}"
+      database-user: "${PATHFINDER_DATASOURCE_USERNAME}"
     type: Opaque
   - kind: Secret
     apiVersion: v1
@@ -2147,6 +2189,27 @@ objects:
         app.kubernetes.io/version: '10.6'
       type: ClusterIP
       sessionAffinity: None
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: pathfinder-postgresql
+      labels:
+        app.kubernetes.io/name: pathfinder-postgres
+        app.kubernetes.io/version: '10.6'
+        app.kubernetes.io/component: database
+        app.kubernetes.io/instance: pathfinder-postgres
+        app.kubernetes.io/part-of: tackle
+    spec:
+      ports:
+        - name: tcp
+          protocol: TCP
+          port: 5432
+          targetPort: 5432
+      selector:
+        app.kubernetes.io/name: pathfinder-postgres
+        app.kubernetes.io/version: '10.6'
+      type: ClusterIP
+      sessionAffinity: None
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
@@ -2332,6 +2395,99 @@ objects:
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
+      name: pathfinder-postgres
+      labels:
+        app.kubernetes.io/name: pathfinder-postgres
+        app.kubernetes.io/version: '10.6'
+        app.kubernetes.io/component: database
+        app.kubernetes.io/instance: pathfinder-postgres
+        app.kubernetes.io/part-of: tackle
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: pathfinder-postgres
+          app.kubernetes.io/version: '10.6'
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: pathfinder-postgres
+            app.kubernetes.io/version: '10.6'
+        spec:
+          volumes:
+            - name: pathfinder-postgresql-data
+              persistentVolumeClaim:
+                claimName: pathfinder-postgresql
+          containers:
+            - name: postgres
+              image: 'postgres:10.6'
+              ports:
+                - containerPort: 5432
+                  protocol: TCP
+              env:
+                - name: POSTGRES_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: pathfinder-postgresql
+                      key: database-user
+                - name: POSTGRES_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: pathfinder-postgresql
+                      key: database-password
+                - name: POSTGRES_DB
+                  valueFrom:
+                    secretKeyRef:
+                      name: pathfinder-postgresql
+                      key: database-name
+              resources: { }
+              livenessProbe:
+                exec:
+                  command:
+                    - /bin/sh
+                    - "-c"
+                    - |
+                      psql -U $POSTGRES_USER -d $POSTGRES_DB -c 'SELECT 1'
+                initialDelaySeconds: 60
+                timeoutSeconds: 10
+                periodSeconds: 10
+                successThreshold: 1
+                failureThreshold: 3
+              readinessProbe:
+                exec:
+                  command:
+                    - /bin/sh
+                    - "-c"
+                    - |
+                      psql -U $POSTGRES_USER -d $POSTGRES_DB -c 'SELECT 1'
+                initialDelaySeconds: 10
+                timeoutSeconds: 1
+                periodSeconds: 10
+                successThreshold: 1
+                failureThreshold: 3
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              imagePullPolicy: IfNotPresent
+              volumeMounts:
+                - name: pathfinder-postgresql-data
+                  mountPath: /var/lib/postgresql
+              securityContext:
+                privileged: false
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+          dnsPolicy: ClusterFirst
+          securityContext: { }
+          schedulerName: default-scheduler
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 25%
+          maxSurge: 25%
+      revisionHistoryLimit: 10
+      progressDeadlineSeconds: 600
+  - kind: Deployment
+    apiVersion: apps/v1
+    metadata:
       name: tackle-ui
       labels:
         app.kubernetes.io/name: tackle-ui
@@ -2366,7 +2522,7 @@ objects:
                 - name: APPLICATION_INVENTORY_API_URL
                   value: http://tackle-application-inventory:8080
                 - name: PATHFINDER_API_URL
-                  value: http://tackle-controls:8080
+                  value: http://pathfinder:8080
                 - name: SSO_REALM
                   value: quarkus
                 - name: SSO_CLIENT_ID
@@ -2468,6 +2624,30 @@ objects:
           targetPort: 8080
       selector:
         app.kubernetes.io/name: tackle-application-inventory
+        app.kubernetes.io/part-of: tackle
+        app.kubernetes.io/version: 0.0.1-SNAPSHOT-native
+      type: ClusterIP
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        prometheus.io/port: "8080"
+        prometheus.io/scheme: http
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /q/metrics
+      labels:
+        app.kubernetes.io/name: tackle-pathfinder
+        app.kubernetes.io/part-of: tackle
+        app.kubernetes.io/version: 0.0.1-SNAPSHOT-native
+        app.kubernetes.io/component: rest
+      name: tackle-pathfinder
+    spec:
+      ports:
+        - name: http
+          port: 8080
+          targetPort: 8080
+      selector:
+        app.kubernetes.io/name: tackle-pathfinder
         app.kubernetes.io/part-of: tackle
         app.kubernetes.io/version: 0.0.1-SNAPSHOT-native
       type: ClusterIP
@@ -2619,6 +2799,83 @@ objects:
                 failureThreshold: 3
                 httpGet:
                   path: "/application-inventory/q/health/ready"
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 0
+                periodSeconds: 30
+                successThreshold: 1
+                timeoutSeconds: 10
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        prometheus.io/port: "8080"
+        prometheus.io/scheme: http
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /q/metrics
+      labels:
+        app.kubernetes.io/component: rest
+        app.kubernetes.io/version: 0.0.1-SNAPSHOT-native
+        app.kubernetes.io/name: tackle-pathfinder
+        app.kubernetes.io/part-of: tackle
+      name: tackle-pathfinder
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app.kubernetes.io/version: 0.0.1-SNAPSHOT-native
+          app.kubernetes.io/name: tackle-pathfinder
+          app.kubernetes.io/part-of: tackle
+      template:
+        metadata:
+          annotations:
+            prometheus.io/port: "8080"
+            prometheus.io/scheme: http
+            prometheus.io/scrape: "true"
+            prometheus.io/path: /q/metrics
+          labels:
+            app.kubernetes.io/component: rest
+            app.kubernetes.io/version: 0.0.1-SNAPSHOT-native
+            app.kubernetes.io/name: tackle-pathfinder
+            app.kubernetes.io/part-of: tackle
+        spec:
+          containers:
+            - env:
+                - name: KUBERNETES_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: QUARKUS_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: pathfinder-postgresql
+                      key: database-user
+                - name: QUARKUS_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: pathfinder-postgresql
+                      key: database-password
+              image: "${PATHFINDER_REST_CONTAINER_IMAGE}"
+              imagePullPolicy: Always
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /pathfinder/q/health/live
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 0
+                periodSeconds: 30
+                successThreshold: 1
+                timeoutSeconds: 10
+              name: tackle-pathfinder
+              ports:
+                - containerPort: 8080
+                  name: http
+                  protocol: TCP
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /pathfinder/q/health/ready
                   port: 8080
                   scheme: HTTP
                 initialDelaySeconds: 0
