@@ -2506,7 +2506,7 @@ spec:
             - name: APPLICATION_INVENTORY_API_URL
               value: 'http://tackle-application-inventory:8080'
             - name: PATHFINDER_API_URL
-              value: 'http://pathfinder:8080'
+              value: 'http://tackle-pathfinder:8080'
             - name: SSO_REALM
               value: quarkus
             - name: SSO_CLIENT_ID
