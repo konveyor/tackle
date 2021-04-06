@@ -29,6 +29,11 @@ parameters:
     name: APPLICATION_INVENTORY_REST_CONTAINER_IMAGE
     value: quay.io/konveyor/tackle-application-inventory:0.0.1-SNAPSHOT-native
     required: true
+  - displayName: Pathfinder REST container images
+    description: The value of the Pathfinder REST container image to be used
+    name: PATHFINDER_REST_CONTAINER_IMAGE
+    value: quay.io/konveyor/tackle-pathfinder:0.0.1-SNAPSHOT-native
+    required: true
   - displayName: Controls Database Username
     description: Controls database user name
     name: CONTROLS_DATASOURCE_USERNAME
@@ -111,21 +116,21 @@ objects:
           storage: 1Gi
       volumeMode: Filesystem
   - kind: PersistentVolumeClaim
-      apiVersion: v1
-      metadata:
-        name: pathfinder-postgresql
-        labels:
-          app.kubernetes.io/name: pathfinder-postgresql
-          app.kubernetes.io/component: database
-          app.kubernetes.io/instance: pathfinder-postgresql
-          app.kubernetes.io/part-of: tackle
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 1Gi
-        volumeMode: Filesystem
+    apiVersion: v1
+    metadata:
+      name: pathfinder-postgresql
+      labels:
+        app.kubernetes.io/name: pathfinder-postgresql
+        app.kubernetes.io/component: database
+        app.kubernetes.io/instance: pathfinder-postgresql
+        app.kubernetes.io/part-of: tackle
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+      volumeMode: Filesystem
   - kind: PersistentVolumeClaim
     apiVersion: v1
     metadata:
@@ -167,7 +172,7 @@ objects:
         app.kubernetes.io/part-of: tackle
     stringData:
       database-name: application_inventory_db
-      database-password: "${APPLICATION_INVENTORY_DATASOURCE_USERNAME}"
+      database-password: "${APPLICATION_INVENTORY_DATASOURCE_PASSWORD}"
       database-user: "${APPLICATION_INVENTORY_DATASOURCE_USERNAME}"
     type: Opaque
   - kind: Secret
@@ -2476,7 +2481,7 @@ objects:
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
           dnsPolicy: ClusterFirst
-          securityContext: { }
+          securityContext: {}
           schedulerName: default-scheduler
       strategy:
         type: RollingUpdate
