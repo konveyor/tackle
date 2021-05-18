@@ -24,6 +24,7 @@ It comprises 3 microservices and accessible from a common [Tackle UI](https://gi
 * [Tackle Documentation](https://github.com/konveyor/tackle-documentation)
 * [Tackle Commons REST](https://github.com/konveyor/tackle-commons-rest)
 * [Tackle Keycloak Theme](https://github.com/konveyor/tackle-keycloak-theme)
+* [Tackle DiVA](https://github.com/konveyor/tackle-diva)
 
 ## Get in touch
 
