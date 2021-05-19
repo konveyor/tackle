@@ -1,12 +1,12 @@
 <img src="https://raw.githubusercontent.com/konveyor/community/main/brand/logo/konveyor-logo-tackle.svg" alt="Logo"/>
 
-# tackle
+# Tackle
 
 ## Refactor Applications to Kubernetes
 
-The tackle project repositories contain tools that support the modernization and migration of applications to Kubernetes.  
+The Tackle project repositories contain tools that support the modernization and migration of applications to Kubernetes.  
 
-The first tools added to tackle are the Application Inventory and Pathfinder.  
+The first tools added to Tackle are the Application Inventory and Pathfinder.  
 It comprises 3 microservices and accessible from a common [Tackle UI](https://github.com/konveyor/tackle-ui/).  
 
 * [Tackle Application Inventory](https://github.com/konveyor/tackle-application-inventory) allows users to maintain their portfolio of applications, link them to the business services that they support, define their interdependencies, and use an extensible tagging model to add metadata to describe and categorise them in multiple dimensions. The Application Inventory is the vehicle by which an application can be selected for assessment by Pathfinder.  
