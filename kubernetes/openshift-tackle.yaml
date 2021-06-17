@@ -2682,6 +2682,8 @@ objects:
                     secretKeyRef:
                       name: controls-postgresql
                       key: database-password
+                - name: QUARKUS_OIDC_AUTH_SERVER_URL
+                  value: http://keycloak:8080/auth/realms/tackle
               image: "${CONTROLS_REST_CONTAINER_IMAGE}"
               imagePullPolicy: Always
               livenessProbe:
@@ -2759,6 +2761,8 @@ objects:
                     secretKeyRef:
                       name: application-inventory-postgresql
                       key: database-password
+                - name: QUARKUS_OIDC_AUTH_SERVER_URL
+                  value: http://keycloak:8080/auth/realms/tackle
               image: "${APPLICATION_INVENTORY_REST_CONTAINER_IMAGE}"
               imagePullPolicy: Always
               livenessProbe:
@@ -2836,6 +2840,8 @@ objects:
                     secretKeyRef:
                       name: pathfinder-postgresql
                       key: database-password
+                - name: QUARKUS_OIDC_AUTH_SERVER_URL
+                  value: http://keycloak:8080/auth/realms/tackle
               image: "${PATHFINDER_REST_CONTAINER_IMAGE}"
               imagePullPolicy: Always
               livenessProbe:

@@ -2665,6 +2665,8 @@ spec:
                 secretKeyRef:
                   name: controls-postgresql
                   key: database-password
+            - name: QUARKUS_OIDC_AUTH_SERVER_URL
+              value: 'http://keycloak:8080/auth/realms/tackle'
           image: quay.io/konveyor/tackle-controls:0.0.1-SNAPSHOT-native
           imagePullPolicy: Always
           livenessProbe:
@@ -2743,6 +2745,8 @@ spec:
                 secretKeyRef:
                   name: application-inventory-postgresql
                   key: database-password
+            - name: QUARKUS_OIDC_AUTH_SERVER_URL
+              value: 'http://keycloak:8080/auth/realms/tackle'
           image: quay.io/konveyor/tackle-application-inventory:0.0.1-SNAPSHOT-native
           imagePullPolicy: Always
           livenessProbe:
@@ -2821,6 +2825,8 @@ spec:
                 secretKeyRef:
                   name: pathfinder-postgresql
                   key: database-password
+            - name: QUARKUS_OIDC_AUTH_SERVER_URL
+              value: 'http://keycloak:8080/auth/realms/tackle'
           image: quay.io/konveyor/tackle-pathfinder:0.0.1-SNAPSHOT-native
           imagePullPolicy: Always
           livenessProbe:
