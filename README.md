@@ -15,6 +15,8 @@ It comprises 3 microservices and accessible from a common [Tackle UI](https://gi
 
 * [Tackle Controls](https://github.com/konveyor/tackle-controls) are a collection of entities that add value to Application Inventory and the Pathfinder assessment. They comprise of Business Services, Stakeholders, Stakeholder Groups, Job Functions, Tag Types and Tags.  
 
+### Other tools within the Tackle portfolio
+
 * [Tackle DiVA](https://github.com/konveyor/tackle-diva) is a data-centric application analysis tool. It imports a set of target application source files and provides database/transaction analysis results.
 
 ## Projects
