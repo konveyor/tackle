@@ -1981,29 +1981,6 @@ data:
         "offlineSessionMaxLifespanEnabled" : "false"
       },
       "users" : [ {
-        "id" : "af134cab-f41c-4675-b141-205f975db679",
-        "username" : "admin",
-        "enabled" : true,
-        "totp" : false,
-        "emailVerified" : false,
-        "credentials" : [ {
-          "type" : "password",
-          "hashedSaltedValue" : "NICTtwsvSxJ5hL8hLAuleDUv9jwZcuXgxviMXvR++cciyPtiIEStEaJUyfA9DOir59awjPrHOumsclPVjNBplA==",
-          "salt" : "T/2P5o5oxFJUEk68BRURRg==",
-          "hashIterations" : 27500,
-          "counter" : 0,
-          "algorithm" : "pbkdf2-sha256",
-          "digits" : 0,
-          "period" : 0,
-          "createdDate" : 1554245879354,
-          "config" : { }
-        } ],
-        "disableableCredentialTypes" : [ "password" ],
-        "requiredActions" : [ ],
-        "realmRoles" : [ "admin", "user" ],
-        "notBefore" : 0,
-        "groups" : [ ]
-      }, {
         "id" : "7749cf8a-bb8a-43c7-a689-80c90e6023eb",
         "createdTimestamp" : 1623676722008,
         "username" : "tackle",
