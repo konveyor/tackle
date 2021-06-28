@@ -1,0 +1,32 @@
+name: Tackle Operator test-suite execution
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Tackle Operator version'
+        required: true
+        default: '1.0.0'
+      repositoryUser:
+        description: 'Repository username'
+        required: true
+        default: 'mrizzi'
+      repositoryBranch:
+        description: 'Repository branch'
+        required: true
+        default: 'tackle-upstream-1.0.0'
+      communityOperatorsRepository:
+        description: 'Community Operators repository'
+        required: true
+        default: 'upstream-community-operators'
+
+jobs:
+  community-operators-test-suite:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        testType: [ kiwi, lemon, orange ]
+    steps:
+      - run: bash <(curl -sL https://cutt.ly/WhkV76k) ${{ matrix.testType }} ${{ github.event.inputs.communityOperatorsRepository }}/tackle-operator/${{ github.event.inputs.version }} https://github.com/${{ github.event.inputs.repositoryUser }}/community-operators ${{ github.event.inputs.repositoryBranch }}
+        shell: 'script -q -e -c "bash {0}"'
+        name: Test Suite
