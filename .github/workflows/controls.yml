@@ -1,0 +1,33 @@
+name: Tackle Controls image builder
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tackle Controls tag'
+        required: true
+        default: '1.0.0'
+
+jobs:
+  build-image:
+    if: github.actor == 'mrizzi' || github.actor == 'jonathanvila' || github.actor == 'm-brophy' || github.actor == 'carlosthe19916' || github.actor == 'PhilipCattanach'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'konveyor/tackle-controls'
+          ref: ${{ github.event.inputs.tag }}
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          java-package: jdk
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build the container
+        run: mvn clean package -Pcontainer-image -Pnative -Dquarkus.container-image.registry=${{ secrets.QUAY_REPO }} -Dquarkus.container-image.group=${{ github.repository_owner }} -Dquarkus.application.version=$(git describe --tags --exact-match) -Dquarkus.jib.labels.\"git.tag\"=$(git describe --tags --exact-match) -Dquarkus.jib.labels.\"git.commit\"=$(git rev-parse HEAD) -Dquarkus.container-image.push=true -Dquarkus.container-image.username=${{ secrets.QUAY_ROBOT_USERNAME }} -Dquarkus.container-image.password=${{ secrets.QUAY_ROBOT_TOKEN }}
