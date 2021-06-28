@@ -1,0 +1,27 @@
+name: Tackle UI image builder
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tackle UI tag'
+        required: true
+        default: '1.0.0'
+
+jobs:
+  build-image:
+    if: github.actor == 'mrizzi' || github.actor == 'jonathanvila' || github.actor == 'm-brophy' || github.actor == 'carlosthe19916' || github.actor == 'PhilipCattanach'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: 'konveyor/tackle-ui'
+          ref: ${{ github.event.inputs.tag }}
+      - name: Yarn Install
+        run: yarn install
+      - name: Yarn Build
+        run: yarn build
+      - name: Container build
+        run: podman build --pull-always --label git.tag=$(git describe --tags --exact-match) --label git.commit=$(git rev-parse HEAD) -t ${{ secrets.QUAY_REPO }}/${{ github.repository_owner }}/tackle-ui:$(git describe --tags --exact-match) .
+      - name: Container push
+        run: podman push ${{ secrets.QUAY_REPO }}/${{ github.repository_owner }}/tackle-ui:$(git describe --tags --exact-match) --creds ${{ secrets.QUAY_ROBOT_USERNAME }}:${{ secrets.QUAY_ROBOT_TOKEN }}
