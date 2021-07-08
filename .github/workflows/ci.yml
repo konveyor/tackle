@@ -57,7 +57,7 @@ jobs:
       - name: Kubectl create namespace
         run: kubectl create ns tackle
       - name: Deploy tackle
-        run: kubectl create -f kubernetes/kubernetes-tackle.yaml -n tackle
+        run: kubectl create -f tackle/kubernetes/kubernetes-tackle.yaml -n tackle
 
       - name: Verify keycloak
         run: kubectl wait deployment/keycloak --for condition=available --timeout=-1s -n tackle
