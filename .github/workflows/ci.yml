@@ -56,8 +56,9 @@ jobs:
         run: minikube addons list -o json | jq '.registry.Status' | grep enabled
       - name: Kubectl create namespace
         run: kubectl create ns tackle
+
       - name: Deploy tackle
-        run: kubectl create -f tackle/kubernetes/kubernetes-tackle.yaml -n tackle
+        run: sleep 60s && kubectl create -f tackle/kubernetes/kubernetes-tackle.yaml -n tackle
 
       - name: Verify keycloak
         run: kubectl wait deployment/keycloak --for condition=available --timeout=-1s -n tackle
@@ -69,8 +70,7 @@ jobs:
         run: kubectl wait deployment/tackle-pathfinder --for condition=available --timeout=-1s -n tackle
       - name: Verify tackle-ui
         run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n tackle
-      - name: Kubectl create ingress
-        run: kubectl create -f tackle/kubernetes/kubernetes-tackle-ingress.yaml -n tackle
+
       - name: Wait for Ingress
         run: |
           bash -c 'external_ip="";
