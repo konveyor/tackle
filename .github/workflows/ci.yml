@@ -69,6 +69,8 @@ jobs:
         run: kubectl wait deployment/tackle-pathfinder --for condition=available --timeout=-1s -n tackle
       - name: Verify tackle-ui
         run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n tackle
+      - name: Kubectl create ingress
+        run: kubectl create -f tackle/kubernetes/kubernetes-tackle-ingress.yaml -n tackle
       - name: Wait for Ingress
         run: |
           bash -c 'external_ip="";
