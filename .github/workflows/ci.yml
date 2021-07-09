@@ -2,8 +2,17 @@ name: CI
 
 on:
   push:
-    branches:
-      - "*"
+    paths-ignore:
+      - ".gitignore"
+      - "LICENSE"
+      - "*.md"
+      - ".github/ISSUE_TEMPLATE/**"
+  pull_request:
+    paths-ignore:
+      - ".gitignore"
+      - "LICENSE"
+      - "*.md"
+      - ".github/ISSUE_TEMPLATE/**"
   schedule:
     - cron: "0 0 * * *"
   workflow_dispatch:
