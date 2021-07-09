@@ -36,13 +36,12 @@ on:
 
 jobs:
   ks8:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest]
         browser: [chrome]
     steps:
-      - name: Checkout Tackle
+      - name: Checkout tackle
         uses: actions/checkout@v2
         with:
           path: tackle
