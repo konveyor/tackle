@@ -306,7 +306,7 @@ spec:
             - name: PROXY_ADDRESS_FORWARDING
               value: "true"
             - name: KEYCLOAK_IMPORT
-              value: /etc/config/quarkus-realm.json
+              value: /etc/config/tackle-realm.json
             - name: DB_VENDOR
               value: postgres
             - name: DB_ADDR
@@ -352,10 +352,10 @@ spec:
 ---
 apiVersion: v1
 data:
-  quarkus-realm.json: |
+  tackle-realm.json: |
     {
       "id" : "11d78bf6-6d10-4484-baba-a1388379d68b",
-      "realm" : "quarkus",
+      "realm" : "tackle",
       "loginTheme": "konveyor",
       "notBefore" : 0,
       "revokeRefreshToken" : false,
@@ -670,13 +670,13 @@ data:
         "id" : "e55e1234-38fa-432d-8d90-39f5e024688d",
         "clientId" : "account",
         "name" : "${client_account}",
-        "baseUrl" : "/auth/realms/quarkus/account",
+        "baseUrl" : "/auth/realms/tackle/account",
         "surrogateAuthRequired" : false,
         "enabled" : true,
         "clientAuthenticatorType" : "client-secret",
         "secret" : "0136c3ef-0dfd-4b13-a6d0-2c8b6358edec",
         "defaultRoles" : [ "view-profile", "manage-account" ],
-        "redirectUris" : [ "/auth/realms/quarkus/account/*" ],
+        "redirectUris" : [ "/auth/realms/tackle/account/*" ],
         "webOrigins" : [ ],
         "notBefore" : 0,
         "bearerOnly" : false,
@@ -972,12 +972,12 @@ data:
         "id" : "a8732cac-ae0f-44ec-b7f3-bd2c41eff13c",
         "clientId" : "security-admin-console",
         "name" : "${client_security-admin-console}",
-        "baseUrl" : "/auth/admin/quarkus/console/index.html",
+        "baseUrl" : "/auth/admin/tackle/console/index.html",
         "surrogateAuthRequired" : false,
         "enabled" : true,
         "clientAuthenticatorType" : "client-secret",
         "secret" : "e571b211-2550-475d-b87f-116ff54091ee",
-        "redirectUris" : [ "/auth/admin/quarkus/console/*" ],
+        "redirectUris" : [ "/auth/admin/tackle/console/*" ],
         "webOrigins" : [ ],
         "notBefore" : 0,
         "bearerOnly" : false,
@@ -1981,72 +1981,25 @@ data:
         "offlineSessionMaxLifespanEnabled" : "false"
       },
       "users" : [ {
-        "id" : "af134cab-f41c-4675-b141-205f975db679",
-        "username" : "admin",
+        "id" : "7749cf8a-bb8a-43c7-a689-80c90e6023eb",
+        "createdTimestamp" : 1623676722008,
+        "username" : "tackle",
         "enabled" : true,
         "totp" : false,
         "emailVerified" : false,
         "credentials" : [ {
+          "id" : "00f322ed-e01e-4032-bb9d-c737486a127c",
           "type" : "password",
-          "hashedSaltedValue" : "NICTtwsvSxJ5hL8hLAuleDUv9jwZcuXgxviMXvR++cciyPtiIEStEaJUyfA9DOir59awjPrHOumsclPVjNBplA==",
-          "salt" : "T/2P5o5oxFJUEk68BRURRg==",
-          "hashIterations" : 27500,
-          "counter" : 0,
-          "algorithm" : "pbkdf2-sha256",
-          "digits" : 0,
-          "period" : 0,
-          "createdDate" : 1554245879354,
-          "config" : { }
+          "createdDate" : 1623676739455,
+          "secretData" : "{\"value\":\"EJkbUZ740P1pMIMYd+iXjSSdYKPxLM2tB4q+0vp25fUjqWEHNTuznr7bPbhAlh7arLEJccUNdFlf8rmtd0YwkA==\",\"salt\":\"BUA3TOrO9EFmFRRulU/yNA==\",\"additionalParameters\":{}}",
+          "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
         } ],
-        "disableableCredentialTypes" : [ "password" ],
-        "requiredActions" : [ ],
-        "realmRoles" : [ "admin", "user" ],
-        "notBefore" : 0,
-        "groups" : [ ]
-      }, {
-        "id" : "eb4123a3-b722-4798-9af5-8957f823657a",
-        "username" : "alice",
-        "enabled" : true,
-        "totp" : false,
-        "emailVerified" : false,
-        "credentials" : [ {
-          "type" : "password",
-          "hashedSaltedValue" : "A3okqV2T/ybXTVEgKfosoSjP8Yc9IZbFP/SY4cEd6hag7TABQrQ6nUSuwagGt96l8cw1DTijO75PqX6uiTXMzw==",
-          "salt" : "sl4mXx6T9FypPH/s9TngfQ==",
-          "hashIterations" : 27500,
-          "counter" : 0,
-          "algorithm" : "pbkdf2-sha256",
-          "digits" : 0,
-          "period" : 0,
-          "createdDate" : 1554245879116,
-          "config" : { }
-        } ],
-        "disableableCredentialTypes" : [ "password" ],
+        "disableableCredentialTypes" : [ ],
         "requiredActions" : [ ],
         "realmRoles" : [ "user" ],
-        "notBefore" : 0,
-        "groups" : [ ]
-      }, {
-        "id" : "1eed6a8e-a853-4597-b4c6-c4c2533546a0",
-        "username" : "jdoe",
-        "enabled" : true,
-        "totp" : false,
-        "emailVerified" : false,
-        "credentials" : [ {
-          "type" : "password",
-          "hashedSaltedValue" : "JV3DUNLjqOadjbBOtC4rvacQI553CGaDGAzBS8MR5ReCr7SwF3E6CsW3T7/XO8ITZAsch8+A/6loeuCoVLLJrg==",
-          "salt" : "uCbOH7HZtyDtMd0E9DG/nw==",
-          "hashIterations" : 27500,
-          "counter" : 0,
-          "algorithm" : "pbkdf2-sha256",
-          "digits" : 0,
-          "period" : 0,
-          "createdDate" : 1554245879227,
-          "config" : { }
-        } ],
-        "disableableCredentialTypes" : [ "password" ],
-        "requiredActions" : [ ],
-        "realmRoles" : [ "confidential", "user" ],
+        "clientRoles" : {
+          "account" : [ "view-profile", "manage-account" ]
+        },
         "notBefore" : 0,
         "groups" : [ ]
       }, {
@@ -2508,7 +2461,7 @@ spec:
             - name: PATHFINDER_API_URL
               value: 'http://tackle-pathfinder:8080'
             - name: SSO_REALM
-              value: quarkus
+              value: tackle
             - name: SSO_CLIENT_ID
               value: tackle-ui
             - name: SSO_SERVER_URL
@@ -2689,6 +2642,8 @@ spec:
                 secretKeyRef:
                   name: controls-postgresql
                   key: database-password
+            - name: QUARKUS_OIDC_AUTH_SERVER_URL
+              value: 'http://keycloak:8080/auth/realms/tackle'
           image: quay.io/konveyor/tackle-controls:0.0.1-SNAPSHOT-native
           imagePullPolicy: Always
           livenessProbe:
@@ -2767,6 +2722,8 @@ spec:
                 secretKeyRef:
                   name: application-inventory-postgresql
                   key: database-password
+            - name: QUARKUS_OIDC_AUTH_SERVER_URL
+              value: 'http://keycloak:8080/auth/realms/tackle'
           image: quay.io/konveyor/tackle-application-inventory:0.0.1-SNAPSHOT-native
           imagePullPolicy: Always
           livenessProbe:
@@ -2845,6 +2802,8 @@ spec:
                 secretKeyRef:
                   name: pathfinder-postgresql
                   key: database-password
+            - name: QUARKUS_OIDC_AUTH_SERVER_URL
+              value: 'http://keycloak:8080/auth/realms/tackle'
           image: quay.io/konveyor/tackle-pathfinder:0.0.1-SNAPSHOT-native
           imagePullPolicy: Always
           livenessProbe:
