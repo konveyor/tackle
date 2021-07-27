@@ -1,0 +1,127 @@
+name: CI
+
+on:
+  push:
+    paths-ignore:
+      - ".gitignore"
+      - "LICENSE"
+      - "*.md"
+      - ".github/ISSUE_TEMPLATE/**"
+  pull_request:
+    paths-ignore:
+      - ".gitignore"
+      - "LICENSE"
+      - "*.md"
+      - ".github/ISSUE_TEMPLATE/**"
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+    inputs:
+      controls:
+        required: false
+        default: "quay.io/konveyor/tackle-controls:latest-native"
+        description: "Container image (tackle-controls)"
+      application-inventory:
+        required: false
+        default: "quay.io/konveyor/tackle-application-inventory:latest-native"
+        description: "Container image (tackle-application-inventory)"
+      pathfinder:
+        required: false
+        default: "quay.io/konveyor/tackle-pathfinder:latest-native"
+        description: "Container image (tackle-pathfinder)"
+      ui:
+        required: false
+        default: "quay.io/konveyor/tackle-ui:main"
+        description: "The container image you want to use"
+
+jobs:
+  ks8:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        browser: [chrome]
+    steps:
+      - name: Checkout tackle
+        uses: actions/checkout@v2
+        with:
+          path: tackle
+      - name: Checkout tackle-ui-tests
+        uses: actions/checkout@v2
+        with:
+          repository: konveyor/tackle-ui-tests
+          path: tackle-ui-tests
+      - name: Setup Minikube
+        uses: manusa/actions-setup-minikube@v2.3.1
+        with:
+          minikube version: v1.18.1
+          kubernetes version: v1.20.2
+          start args: "--addons=registry --addons=ingress"
+      - name: Validate Minikube
+        run: minikube status | grep Running
+      - name: Validate Cluster
+        run: kubectl get nodes
+      - name: Validate enabled addon in arg
+        run: minikube addons list -o json | jq '.registry.Status' | grep enabled
+      - name: Kubectl create namespace
+        run: kubectl create ns tackle
+
+      - name: Deploy tackle
+        run: sleep 60s && kubectl create -f tackle/kubernetes/kubernetes-tackle.yaml -n tackle
+
+      - name: Verify keycloak
+        run: kubectl wait deployment/keycloak --for condition=available --timeout=-1s -n tackle
+      - name: Verify tackle-controls
+        run: kubectl wait deployment/tackle-controls --for condition=available --timeout=-1s -n tackle
+      - name: Verify tackle-application-inventory
+        run: kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1s -n tackle
+      - name: Verify tackle-pathfinder
+        run: kubectl wait deployment/tackle-pathfinder --for condition=available --timeout=-1s -n tackle
+      - name: Verify tackle-ui
+        run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n tackle
+
+      - name: Wait for Ingress
+        run: |
+          bash -c 'external_ip="";
+          while [ -z $external_ip ];
+            do echo "Waiting for end point...";
+            external_ip=$(kubectl get ingress tackle --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}" -n tackle);[ -z "$external_ip" ] &&
+            sleep 10;
+          done;
+          echo "End point ready:" &&
+          echo $external_ip;
+          export endpoint=$external_ip;
+          echo "CYPRESS_tackleUrl=https://$external_ip" >>$GITHUB_ENV'
+
+      - name: Set custom tackle-controls
+        if: ${{ github.event.inputs.controls != '' }}
+        run: |
+          kubectl set image deployment/tackle-controls tackle-controls=${{ github.event.inputs.controls }} -n tackle
+          kubectl wait deployment/tackle-controls --for condition=available --timeout=-1s -n tackle
+      - name: Set custom tackle-application-inventory
+        if: ${{ github.event.inputs.application-inventory != '' }}
+        run: |
+          kubectl set image deployment/tackle-application-inventory tackle-application-inventory=${{ github.event.inputs.application-inventory }} -n tackle
+          kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1s -n tackle
+      - name: Set custom tackle-pathfinder
+        if: ${{ github.event.inputs.pathfinder != '' }}
+        run: |
+          kubectl set image deployment/tackle-pathfinder tackle-pathfinder=${{ github.event.inputs.pathfinder }} -n tackle
+          kubectl wait deployment/tackle-pathfinder --for condition=available --timeout=-1s -n tackle
+      - name: Set custom tackle-ui
+        if: ${{ github.event.inputs.ui != '' }}
+        run: |
+          kubectl set image deployment/tackle-ui tackle-ui=${{ github.event.inputs.ui }} -n tackle
+          kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n tackle
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: tackle-ui-tests
+          record: false
+          start: npx echo "Starting Minikube Cypress tests"
+          config: pageLoadTimeout=100000
+          browser: ${{ matrix.browser }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_user: admin
+          CYPRESS_pass: admin
