@@ -19,6 +19,8 @@ It comprises 3 microservices and accessible from a common [Tackle UI](https://gi
 
 * [Tackle DiVA](https://github.com/konveyor/tackle-diva) is a data-centric application analysis tool. It imports a set of target application source files and provides database/transaction analysis results.
 
+* [Tackle Test](https://github.com/konveyor/tackle-test-generator-cli) is an automatic test-generation and differential-testing tool. Currently, Tacke-test supports unit-level test generation for Java applications; future project plans include adding capabilities for automated generation of end-to-end UI/UX test cases for web applications and test cases for REST APIs.
+
 ## Projects
 
 * [Tackle Web UI](https://github.com/konveyor/tackle-ui)
@@ -29,6 +31,7 @@ It comprises 3 microservices and accessible from a common [Tackle UI](https://gi
 * [Tackle Commons REST](https://github.com/konveyor/tackle-commons-rest)
 * [Tackle Keycloak Theme](https://github.com/konveyor/tackle-keycloak-theme)
 * [Tackle DiVA](https://github.com/konveyor/tackle-diva)
+* [Tackle Test](https://github.com/konveyor/tackle-test-generator-cli)
 
 ## Get in touch
 
