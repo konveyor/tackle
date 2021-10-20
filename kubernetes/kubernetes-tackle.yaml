@@ -1573,8 +1573,12 @@ data:
           }
         } ]
       },
-      "internationalizationEnabled" : false,
-      "supportedLocales" : [ ],
+      "internationalizationEnabled": true,
+      "supportedLocales": [
+        "en",
+        "es"
+      ],
+      "defaultLocale": "en",
       "authenticationFlows" : [ {
         "id" : "d6c3e282-a738-4b8b-98c2-378b9faf8344",
         "alias" : "Handle Existing Account",
