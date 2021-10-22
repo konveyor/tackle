@@ -21,6 +21,10 @@ It comprises 3 microservices and accessible from a common [Tackle UI](https://gi
 
 * [Tackle Test Generator](https://github.com/konveyor/tackle-test-generator-cli) is an automatic test-generation and differential-testing tool. Currently, Tacke-test supports unit-level test generation for Java applications; future project plans include adding capabilities for automated generation of end-to-end UI/UX test cases for web applications and test cases for REST APIs.
 
+* [Tackle Container Advisor](https://github.com/konveyor/tackle-container-advisor) is a tool that provides containerization advisory for a large scale application portfolio. It takes client applications as a natural language description and recommends whether client applications can be containerized in terms of images from DockerHub and Openshift catalogs. In future we plan to support Operators and recommend disposition with explanability.
+
+
+
 ## Projects
 
 * [Tackle Web UI](https://github.com/konveyor/tackle-ui)
@@ -32,6 +36,7 @@ It comprises 3 microservices and accessible from a common [Tackle UI](https://gi
 * [Tackle Keycloak Theme](https://github.com/konveyor/tackle-keycloak-theme)
 * [Tackle DiVA](https://github.com/konveyor/tackle-diva)
 * [Tackle Test Generator](https://github.com/konveyor/tackle-test-generator-cli)
+* [Tackle Container Advisor](https://github.com/konveyor/tackle-container-advisor)
 
 ## Get in touch
 
