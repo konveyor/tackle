@@ -23,8 +23,6 @@ It comprises 3 microservices and accessible from a common [Tackle UI](https://gi
 
 * [Tackle Container Advisor](https://github.com/konveyor/tackle-container-advisor) is a tool that provides containerization advisory for a large scale application portfolio. It takes a natural language description of applications and recommends whether the applications can be containerized in terms of images from multiple container catalogs (DockerHub, Openshift). In future we plan to support Operators and recommend disposition with explainability.
 
-
-
 ## Projects
 
 * [Tackle Web UI](https://github.com/konveyor/tackle-ui)
