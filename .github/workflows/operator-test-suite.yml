@@ -23,6 +23,8 @@ on:
 jobs:
   community-operators-test-suite:
     runs-on: ubuntu-latest
+    env:
+      OP_DEBUG: 1
     strategy:
       matrix:
         testType: [ kiwi, lemon, orange ]
