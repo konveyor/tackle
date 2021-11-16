@@ -27,6 +27,6 @@ jobs:
       matrix:
         testType: [ kiwi, lemon, orange ]
     steps:
-      - run: bash <(curl -sL https://raw.githubusercontent.com/redhat-openshift-ecosystem/community-operators-pipeline/ci/latest/ci/scripts/opp.sh) ${{ matrix.testType }} ${{ github.event.inputs.communityOperatorsRepository }}/tackle-operator/${{ github.event.inputs.version }} https://github.com/${{ github.event.inputs.repositoryUser }}/community-operators ${{ github.event.inputs.repositoryBranch }}
+      - run: bash <(curl -sL https://raw.githubusercontent.com/redhat-openshift-ecosystem/community-operators-pipeline/ci/latest/ci/scripts/opp.sh) ${{ matrix.testType }} ${{ github.event.inputs.communityOperatorsRepository }}/tackle-operator/${{ github.event.inputs.version }} ${{ github.event.inputs.repositoryUser }}/community-operators ${{ github.event.inputs.repositoryBranch }}
         shell: 'script -q -e -c "bash {0}"'
         name: Test Suite
