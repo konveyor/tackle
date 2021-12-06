@@ -285,12 +285,7 @@ spec:
           emptyDir: {}
       initContainers:
         - name: keycloak-theme
-          image: busybox:stable
-          command:
-            - wget
-            - "-P"
-            - "deployments"
-            - "https://raw.githubusercontent.com/konveyor/tackle-keycloak-theme/main/tackle-keycloak-theme-0.1-SNAPSHOT.jar"
+          image: quay.io/konveyor/tackle-keycloak-init:0.1-SNAPSHOT
           volumeMounts:
             - name: theme-volume
               mountPath: /deployments
