@@ -17,6 +17,10 @@ jobs:
         with:
           repository: 'konveyor/tackle-ui'
           ref: ${{ github.event.inputs.tag }}
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
       - name: Yarn Install
         run: yarn install
       - name: Yarn Build
