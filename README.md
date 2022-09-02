@@ -43,3 +43,6 @@ It comprises 3 microservices and accessible from a common [Tackle UI](https://gi
 ## Get in touch
 
 * [tackle-dev](https://groups.google.com/g/tackle-dev) conversations group
+
+## Code of Conduct
+Refer to Konveyor's Code of Conduct [here](https://github.com/konveyor/community/blob/main/CODE_OF_CONDUCT.md).
